@@ -4,4 +4,4 @@ The OpenRAN@Brasil Blueprint is a virtual machine image containing an already in
 ![image](https://github.com/LAB-LAPSI-UFCG/openran-br-blueprint-seguranca/assets/162452677/1e81688a-6c08-4a61-9cea-07e5c4b8bf18)
 
 More information:
- - [OpenRAN@Brasil Blueprint v0 segura](https://github.com/LAB-LAPSI-UFCG/openran-br-blueprint-seguranca/wiki/OpenRAN@Brasil-Blueprint-v0-S)
+ - [OpenRAN@Brasil Blueprint v0 safe](https://github.com/LAB-LAPSI-UFCG/openran-br-blueprint-seguranca/wiki/OpenRAN@Brasil-Blueprint-v0-S)
