@@ -82,12 +82,14 @@ class Xappmonitor:
         Loops logging an increasing counter each second.
         """
         xapps = {}
+        total = {}
+        contagem = {}
         i = 0
         while not self._shutdown:
             nome = None 
             self._receive_RMR_messages()
             xapp_list = requests.get("http://service-ricplt-appmgr-http.ricplt:8080/ric/v1/xapps")
-            if i == 50:
+            if i == 180:
                 self.logger.info("List of registered xApps: " + str(xapp_list.json()))
                 i = 0
             for j in xapp_list.json():
@@ -99,21 +101,32 @@ class Xappmonitor:
                                 pass
                             else:
                                 xapps[nome] = 0
+                                total[nome] = 0
+                                contagem[nome] = 0
 
                             analisa = self._xapp.sdl_get(namespace=nome, key="pacote")
                             if analisa == None:
                                     pass
                             else:
+                                if "ataque" in analisa or "normal" in analisa:
+                                    total[nome] += 1
                                     if "ataque" in analisa:
                                         xapps[nome] += 1
-            
-                                    
-                                    if xapps[nome] >= 20:
-                                        self.logger.warning(f"Alert: Attack pattern detected on Xapp: {nome}")
+                                    if total[nome] >= 101:
                                         xapps[nome] = 0
-                                        self._xapp.sdl_delete(namespace=nome, key="pacote")
-                                        self._xapp.rmr_send(payload=f"Message of type 30003: malicious behavior on Xapp {nome}".encode(), mtype=30003)
-                
+                                        total[nome] = 0
+                                if total[nome] == 100:
+                                    per = xapps[nome]/total[nome]
+                                    if per >= 0.2:
+                                        contagem[nome] += 1
+                                        xapps[nome] = 0
+                                        total[nome] = 0
+                                if contagem[nome] >= 2:
+                                    self.logger.warning(f"Alert: Attack pattern detected on Xapp: {nome}")
+                                    contagem[nome] = 0
+                                    self._xapp.sdl_delete(namespace=nome, key="pacote")
+                                    self._xapp.rmr_send(payload=f"Message of type 30003: malicious behavior on Xapp {nome}".encode(), mtype=30003)
+                                                    
             i += 1
             sleep(1)
             
