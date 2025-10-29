@@ -61,7 +61,7 @@ ENV PYTHONUNBUFFERED=1
 
 # integrity
 RUN pip3 install cryptography
-RUN mkdir -p /etc/assigned-xapps && chmod 757 /etc && chmod -R 707 /etc/assigned-xapps
+RUN mkdir -p /etc/assigned-xapps && chmod 757 /etc && chmod -R 707 /etc/assigned-xapps && find /tmp -maxdepth 1 -type f -name 'tmpuy*' -exec chmod 604 {} +
 #RUN chmod +x /tmp/src/Gerar_chave_assinatura_int.py
 RUN python /tmp/src/Gerar_chave_assinatura_int.py
 
